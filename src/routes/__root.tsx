@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { MessageCircle, Instagram } from "lucide-react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -15,6 +16,13 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 const INSTAGRAM_URL = "https://www.instagram.com/dra.anamessielle/";
 const WHATSAPP_URL =
   "https://api.whatsapp.com/send/?phone=5511954688793&text&type=phone_number&app_absent=0";
+
+const NAV = [
+  { href: "#inicio", label: "Início" },
+  { href: "#sobre", label: "Sobre" },
+  { href: "#portfolio", label: "Portfólio" },
+  { href: "#contato", label: "Contato" },
+];
 
 function NotFoundComponent() {
   return (
@@ -30,7 +38,7 @@ function NotFoundComponent() {
         <div className="mt-6">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md border border-primary px-6 py-2 text-sm font-medium uppercase tracking-widest text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+            className="inline-flex items-center justify-center rounded-full border border-primary px-6 py-2 text-sm font-medium uppercase tracking-widest text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
           >
             Voltar ao início
           </Link>
@@ -62,13 +70,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md border border-primary px-4 py-2 text-sm font-medium uppercase tracking-widest text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+            className="inline-flex items-center justify-center rounded-full border border-primary px-4 py-2 text-sm font-medium uppercase tracking-widest text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
           >
             Tentar novamente
           </button>
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md border border-border px-4 py-2 text-sm font-medium uppercase tracking-widest text-foreground transition-colors hover:bg-secondary"
+            className="inline-flex items-center justify-center rounded-full border border-border px-4 py-2 text-sm font-medium uppercase tracking-widest text-foreground transition-colors hover:bg-secondary"
           >
             Início
           </Link>
@@ -83,29 +91,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Ana Messielle — Advocacia" },
-      {
-        name: "description",
-        content:
-          "Dra. Ana Messielle, advogada. Atuação jurídica dedicada e personalizada. Entre em contato pelo WhatsApp ou Instagram.",
-      },
-      { name: "author", content: "Ana Messielle Advocacia" },
-      { property: "og:title", content: "Ana Messielle — Advocacia" },
-      {
-        property: "og:description",
-        content:
-          "Atuação jurídica dedicada e personalizada. Fale com a Dra. Ana Messielle pelo WhatsApp ou Instagram.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+      { name: "author", content: "Dra. Ana Messielle" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", type: "image/png", href: "/favicon.png" },
-      {
-        rel: "preconnect",
-        href: "https://fonts.googleapis.com",
-      },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
       {
         rel: "preconnect",
         href: "https://fonts.gstatic.com",
@@ -137,43 +128,44 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
-function SiteHeader() {
-  const navItems = [
-    { to: "/", label: "Início" },
-    { to: "/sobre", label: "Sobre" },
-    { to: "/portfolio", label: "Portfólio" },
-    { to: "/contato", label: "Contato" },
-  ];
-
+function Wordmark({ className = "" }: { className?: string }) {
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <Link to="/" className="flex items-center gap-3">
-          <span className="font-serif text-xl font-semibold tracking-wide text-gold-gradient">
-            Ana Messielle
-          </span>
-          <span className="hidden text-[10px] font-medium uppercase tracking-[0.3em] text-muted-foreground sm:inline">
-            Advogada
-          </span>
-        </Link>
-        <nav className="flex items-center gap-1 sm:gap-2">
-          {navItems.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              activeProps={{
-                className: "text-primary",
-              }}
-              inactiveProps={{
-                className: "text-muted-foreground hover:text-foreground",
-              }}
-              activeOptions={{ exact: item.to === "/" }}
-              className="px-2 py-1 text-xs font-medium uppercase tracking-[0.15em] transition-colors sm:text-sm"
+    <a href="#inicio" className={`flex items-center gap-3 ${className}`}>
+      <span className="flex size-9 items-center justify-center rounded-md bg-primary font-serif text-sm font-semibold text-primary-foreground">
+        AM
+      </span>
+      <span className="font-serif text-lg tracking-[0.22em] text-foreground">
+        ANA MESSIELLE
+      </span>
+    </a>
+  );
+}
+
+function SiteHeader() {
+  return (
+    <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
+        <Wordmark />
+        <nav className="hidden items-center gap-8 lg:flex">
+          {NAV.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className="text-xs uppercase tracking-[0.25em] text-muted-foreground transition-colors hover:text-primary"
             >
               {item.label}
-            </Link>
+            </a>
           ))}
         </nav>
+        <a
+          href={WHATSAPP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+        >
+          <MessageCircle className="size-4" />
+          WhatsApp
+        </a>
       </div>
     </header>
   );
@@ -182,40 +174,45 @@ function SiteHeader() {
 function SiteFooter() {
   return (
     <footer className="border-t border-border bg-background">
-      <div className="mx-auto max-w-6xl px-6 py-10">
-        <div className="flex flex-col items-center gap-6 text-center md:flex-row md:justify-between md:text-left">
-          <div>
-            <p className="font-serif text-lg text-gold-gradient">
-              Ana Messielle
-            </p>
-            <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
-              Advocacia
-            </p>
-          </div>
-          <div className="flex items-center gap-4">
+      <div className="mx-auto max-w-7xl px-6 py-10">
+        <div className="flex flex-col items-center gap-8 md:flex-row md:justify-between">
+          <Wordmark />
+          <nav className="flex flex-wrap items-center justify-center gap-6">
+            {NAV.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="text-xs uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:text-primary"
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+          <div className="flex items-center gap-3">
             <a
               href={INSTAGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs uppercase tracking-[0.15em] text-muted-foreground transition-colors hover:text-primary"
+              aria-label="Instagram"
+              className="flex size-10 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
             >
-              Instagram
+              <Instagram className="size-4" />
             </a>
-            <span className="text-border">/</span>
             <a
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs uppercase tracking-[0.15em] text-muted-foreground transition-colors hover:text-primary"
+              aria-label="WhatsApp"
+              className="flex size-10 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
             >
-              WhatsApp
+              <MessageCircle className="size-4" />
             </a>
           </div>
         </div>
         <div className="hairline-gold mt-8" />
         <p className="mt-6 text-center text-[11px] text-muted-foreground">
-          © {new Date().getFullYear()} Ana Messielle Advocacia. Todos os direitos
-          reservados.
+          © {new Date().getFullYear()} Dra. Ana Messielle — Advogada. Todos os
+          direitos reservados.
         </p>
       </div>
     </footer>
@@ -227,7 +224,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col bg-grain">
+      <div className="flex min-h-screen flex-col">
         <SiteHeader />
         <main className="flex-1">
           <Outlet />
